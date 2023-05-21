@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator erd {
+  provider = "prisma-erd-generator"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model usuarios {
+  id_user     String      @id @default(uuid())
+  first_name  String
+  second_name String
+  email       String      @unique
+  favs        favoritos[]
+  celulares   celular[]
+}
+
+model favoritos {
+  id_fav    String   @id @default(uuid())
+  id_user   String
+  nome      String
+  endereco  String
+  cidade    String
+  bairro    String
+  estado    String
+  numero    String
+  CEP       String
+  lat       Float
+  lng       Float
+  createdAt DateTime @default(now())
+
+  user usuarios @relation(fields: [id_user], references: [id_user])
+}
+
+model celular {
+  id_phone String @id @default(uuid())
+  numero   String
+  id_user  String
+
+  user usuarios @relation(fields: [id_user], references: [id_user])
+}
