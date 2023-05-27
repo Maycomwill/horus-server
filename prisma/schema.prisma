@@ -15,12 +15,13 @@ datasource db {
 }
 
 model usuarios {
-  id_user     String      @id @default(uuid())
+  id_user     String @id @default(uuid())
   first_name  String
   second_name String
-  email       String      @unique
-  favs        favoritos[]
-  celulares   celular[]
+  email       String @unique
+
+  celulares celular[]
+  favoritos favoritos[]
 }
 
 model celular {
@@ -33,12 +34,12 @@ model celular {
 
 model favoritos {
   id_fav    String   @id @default(uuid())
+  createdAt DateTime @default(now())
   id_user   String
   id_ponto  String
-  createdAt DateTime @default(now())
 
-  ponto PontosTuristicos @relation(fields: [id_ponto], references: [id_ponto])
-  user  usuarios         @relation(fields: [id_user], references: [id_user])
+  users            usuarios         @relation(fields: [id_user], references: [id_user])
+  pontosTuristicos PontosTuristicos @relation(fields: [id_ponto], references: [id_ponto])
 }
 
 model PontosTuristicos {

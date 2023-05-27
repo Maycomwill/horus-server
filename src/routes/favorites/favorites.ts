@@ -25,46 +25,51 @@ export async function FavoritesRoutes(app: FastifyInstance) {
     return reply.status(200).send(favorite)
   })
 
+  //  Gettning all favorites with same location
+  app.get('/favorites/same/:id_ponto', async (request, reply) => {
+    const idSchema = z.object({
+      id_ponto: z.string().uuid(),
+    })
+    const { id_ponto } = idSchema.parse(request.params)
+
+    const favs = await prisma.favoritos.findMany({
+      where: {
+        id_ponto,
+      },
+    })
+
+    return reply.status(200).send(favs)
+  })
+
+  //  Gettning all favorites with same user
+  app.get('/favorites/user/:id_user', async (request, reply) => {
+    const idSchema = z.object({
+      id_user: z.string().uuid(),
+    })
+    const { id_user } = idSchema.parse(request.params)
+
+    const favs = await prisma.favoritos.findMany({
+      where: {
+        id_user,
+      },
+    })
+
+    return reply.status(200).send(favs)
+  })
+
   //  Creating new Favorite
   app.post('/favorites/create', async (request, reply) => {
     const favoriteSchema = z.object({
       id_user: z.string().uuid(),
-      nome: z.string(),
-      endereco: z.string(),
-      bairro: z.string(),
-      cidade: z.string(),
-      estado: z.string(),
-      numero: z.string(),
-      CEP: z.string(),
-      lat: z.number(),
-      lng: z.number(),
+      id_ponto: z.string().uuid(),
     })
 
-    const {
-      CEP,
-      bairro,
-      endereco,
-      estado,
-      id_user,
-      lat,
-      cidade,
-      lng,
-      nome,
-      numero,
-    } = favoriteSchema.parse(request.body)
+    const { id_user, id_ponto } = favoriteSchema.parse(request.body)
 
     const favorite = await prisma.favoritos.create({
       data: {
-        CEP,
-        nome,
-        endereco,
-        numero,
-        bairro,
-        cidade,
-        estado,
         id_user,
-        lat,
-        lng,
+        id_ponto,
       },
     })
 
@@ -95,46 +100,17 @@ export async function FavoritesRoutes(app: FastifyInstance) {
     const { id_fav } = idSchema.parse(request.params)
 
     const favoriteSchema = z.object({
-      id_user: z.string().uuid(),
-      nome: z.string(),
-      endereco: z.string(),
-      bairro: z.string(),
-      cidade: z.string(),
-      estado: z.string(),
-      numero: z.string(),
-      CEP: z.string(),
-      lat: z.number(),
-      lng: z.number(),
+      id_ponto: z.string().uuid(),
     })
 
-    const {
-      CEP,
-      bairro,
-      endereco,
-      estado,
-      id_user,
-      lat,
-      cidade,
-      lng,
-      nome,
-      numero,
-    } = favoriteSchema.parse(request.body)
+    const { id_ponto } = favoriteSchema.parse(request.body)
 
     await prisma.favoritos.update({
       where: {
         id_fav,
       },
       data: {
-        CEP,
-        nome,
-        endereco,
-        numero,
-        bairro,
-        cidade,
-        estado,
-        id_user,
-        lat,
-        lng,
+        id_ponto,
       },
     })
 
