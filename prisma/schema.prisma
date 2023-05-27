@@ -23,9 +23,26 @@ model usuarios {
   celulares   celular[]
 }
 
+model celular {
+  id_phone String @id @default(uuid())
+  numero   String
+  id_user  String
+
+  user usuarios @relation(fields: [id_user], references: [id_user])
+}
+
 model favoritos {
   id_fav    String   @id @default(uuid())
   id_user   String
+  id_ponto  String
+  createdAt DateTime @default(now())
+
+  ponto PontosTuristicos @relation(fields: [id_ponto], references: [id_ponto])
+  user  usuarios         @relation(fields: [id_user], references: [id_user])
+}
+
+model PontosTuristicos {
+  id_ponto  String      @id @default(uuid())
   nome      String
   endereco  String
   cidade    String
@@ -35,15 +52,6 @@ model favoritos {
   CEP       String
   lat       Float
   lng       Float
-  createdAt DateTime @default(now())
-
-  user usuarios @relation(fields: [id_user], references: [id_user])
-}
-
-model celular {
-  id_phone String @id @default(uuid())
-  numero   String
-  id_user  String
-
-  user usuarios @relation(fields: [id_user], references: [id_user])
+  createdAt DateTime    @default(now())
+  favoritos favoritos[]
 }
