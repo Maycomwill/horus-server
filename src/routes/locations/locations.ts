@@ -37,11 +37,13 @@ export async function TuristLocationsRoutes(app: FastifyInstance) {
       estado: z.string(),
       numero: z.string(),
       CEP: z.string(),
+      desc: z.string(),
+      openingHours: z.string(),
       lat: z.number(),
       lng: z.number(),
     })
 
-    const { nome, endereco, cidade, bairro, estado, numero, CEP, lat, lng } =
+    const { nome, endereco, cidade, bairro, estado, numero, CEP, desc, openingHours, lat, lng } =
       locationsSchema.parse(request.body)
 
     const location = await prisma.pontosTuristicos.create({
@@ -53,6 +55,8 @@ export async function TuristLocationsRoutes(app: FastifyInstance) {
         estado,
         numero,
         CEP,
+        desc,
+        openingHours,
         lat,
         lng,
       },

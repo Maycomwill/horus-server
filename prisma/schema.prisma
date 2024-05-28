@@ -10,15 +10,16 @@ generator erd {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model usuarios {
-  id_user     String @id @default(uuid())
-  first_name  String
-  second_name String
-  email       String @unique
+  id_user    String @id @default(uuid())
+  first_name String
+  last_name  String
+  email      String @unique
+  password   String
 
   celulares celular[]
   favoritos favoritos[]
@@ -43,16 +44,18 @@ model favoritos {
 }
 
 model PontosTuristicos {
-  id_ponto  String      @id @default(uuid())
-  nome      String
-  endereco  String
-  cidade    String
-  bairro    String
-  estado    String
-  numero    String
-  CEP       String
-  lat       Float
-  lng       Float
-  createdAt DateTime    @default(now())
-  favoritos favoritos[]
+  id_ponto     String      @id @default(uuid())
+  nome         String
+  endereco     String
+  cidade       String
+  bairro       String
+  estado       String
+  numero       String
+  CEP          String
+  desc         String      @default("Descrição do local")
+  openingHours String      @default("Aberto todos os dias")
+  lat          Float
+  lng          Float
+  createdAt    DateTime    @default(now())
+  favoritos    favoritos[]
 }
